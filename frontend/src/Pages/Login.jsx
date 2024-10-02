@@ -1,41 +1,37 @@
+import { memo } from "react";
 import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-
 import { useAuth } from "../Context/AuthContext";
-
 import FloatingInput from "../Components/Buttons/FloatingInput";
 import FloatingPasswordInput from "../Components/Buttons/FloatingPasswordInput";
 import ErrorToast from "../Components/ErrorToast";
 import FormAppInfo from "../Components/FormAppInfo";
 import GoogleLoginBtn from "../Components/Buttons/GoogleLoginBtn";
-
 const initialValues = {
   email: "",
   password: ""
 };
-
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid Email Address").required("Required"),
-
-  password: Yup.string()
-    .min(6, "Password must be 6 charcters at minimum")
-    .max(30, "Password is too big!")
-    .required("Required")
+  password: Yup.string().min(6, "Password must be 6 charcters at minimum").max(30, "Password is too big!").required("Required")
 });
-
-function Login() {
-  const { login, currentUser } = useAuth();
+const Login = memo(function Login() {
+  const {
+    login,
+    currentUser
+  } = useAuth();
   let navigate = useNavigate();
-
   const toastRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState(null);
-
   async function onSubmit(values, onSubmitProps) {
     console.log("login started!");
-    const { email, password } = values;
+    const {
+      email,
+      password
+    } = values;
     try {
       await login(email, password);
       console.log("logged in successfully");
@@ -46,20 +42,21 @@ function Login() {
       console.log(error);
     }
   }
-
   useEffect(() => {
     if (currentUser) {
       navigate("/app");
     }
   }, [currentUser]);
-
-  return (
-    <motion.div
-      intial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0, transition: { duration: 0.2 } }}
-      className="bg-black"
-    >
+  return <motion.div intial={{
+    opacity: 0
+  }} animate={{
+    opacity: 1
+  }} exit={{
+    opacity: 0,
+    transition: {
+      duration: 0.2
+    }
+  }} className="bg-black">
       <ErrorToast message={errorMessage} ref={toastRef} />
       <div className="grid grid-cols-1 lg:grid-cols-2 bg-black text-white ">
         <div className="w-full h-screen py-20 lg:py-32  px-4  mx-auto  xl:py-32 md:w-3/5 lg:w-4/5 xl:w-3/5">
@@ -67,56 +64,29 @@ function Login() {
             Log In{" "}
           </h1>
           {/* email password signin */}
-          <Formik
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            validationSchema={validationSchema}
-            validateOnMount
-          >
-            {(formik) => {
-              return (
-                <Form autoComplete="off" className="divide-y divide-gray-200">
+          <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema} validateOnMount>
+            {formik => {
+            return <Form autoComplete="off" className="divide-y divide-gray-200">
                   <div className="font-text text-base leading-6 space-y-5 text-gray-700 sm:text-lg sm:leading-7">
-                    <FloatingInput
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="Email address"
-                    />
-                    <FloatingPasswordInput
-                      id="password"
-                      name="password"
-                      type="password"
-                      placeholder="Password"
-                    />
+                    <FloatingInput id="email" name="email" type="email" placeholder="Email address" />
+                    <FloatingPasswordInput id="password" name="password" type="password" placeholder="Password" />
 
                     <Link to="/forgotPassword" className="text-sm ">
-                      <p
-                        className="font-medium text-[#1ed760] hover:text-[#1db954]
-                                        mt-4"
-                      >
+                      <p className="font-medium text-[#1ed760] hover:text-[#1db954]
+                                        mt-4">
                         {" "}
                         Forgot Password?
                       </p>
                     </Link>
                   </div>
                   <div className="mt-8">
-                    <button
-                      type="submit"
-                      disabled={!formik.isValid || formik.isSubmitting}
-                      aria-label="create my account"
-                      className={`focus:ring-2 font-text  
-                      ${
-                        (!formik.isValid || formik.isSubmitting) &&
-                        " focus:ring-gray-700 bg-gray-700 border hover:bg-gray-600"
-                      } focus:ring-offset-2 focus:ring-green-600 text-sm font-bold leading-none text-white focus:outline-none bg-green-600 border rounded hover:bg-green-600 py-4 w-full  `}
-                    >
+                    <button type="submit" disabled={!formik.isValid || formik.isSubmitting} aria-label="create my account" className={`focus:ring-2 font-text  
+                      ${(!formik.isValid || formik.isSubmitting) && " focus:ring-gray-700 bg-gray-700 border hover:bg-gray-600"} focus:ring-offset-2 focus:ring-green-600 text-sm font-bold leading-none text-white focus:outline-none bg-green-600 border rounded hover:bg-green-600 py-4 w-full  `}>
                       {formik.isSubmitting ? "Logging You In..." : "Login To My Account"}
                     </button>
                   </div>
-                </Form>
-              );
-            }}
+                </Form>;
+          }}
           </Formik>
           <Link to="/signup" className="text-md my-8 flex justify-center">
             <p className="font-medium text-[#1ed760] hover:text-[#1db954] font-title">
@@ -141,8 +111,6 @@ function Login() {
         </div>
         <FormAppInfo />
       </div>
-    </motion.div>
-  );
-}
-
+    </motion.div>;
+});
 export default Login;

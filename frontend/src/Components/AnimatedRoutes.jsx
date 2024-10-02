@@ -1,7 +1,7 @@
+import { memo } from "react";
 import { Suspense, lazy } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Route, Routes, useLocation } from "react-router-dom";
-
 import ProtectedRoute from "./ProtectedRoute";
 import SidebarLayout from "./SidebarLayout";
 import NotFound404 from "../Pages/NotFound404";
@@ -29,7 +29,6 @@ import Social from "../Pages/Social";
 import SocialPost from "../Pages/SocialPost";
 import SocialPostDetails from "../Pages/socialPostDetails";
 import BillyChatBot from "../Pages/BillyChatBot";
-
 const Login = lazy(() => import("../Pages/Login"));
 const Signup = lazy(() => import("../Pages/Signup"));
 const ResetPassword = lazy(() => import("../Pages/ResetPassword"));
@@ -51,26 +50,16 @@ const ForgotPassword = lazy(() => import("../Pages/ForgotPassword"));
 // const GlobalStats = lazy(() => import("../Pages/GlobalStats"));
 // const VirtualUsdPage = lazy(() => import("../Pages/VirtualUsdPage"));
 
-const AnimatedRoutes = () => {
+const AnimatedRoutes = memo(() => {
   const location = useLocation();
-  return (
-    <AnimatePresence mode={"wait"}>
+  return <AnimatePresence mode={"wait"}>
       <Routes location={location} key={location.pathname}>
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<Loader />}>
+        <Route path="/" element={<Suspense fallback={<Loader />}>
               <Login />
-            </Suspense>
-          }
-        />
-        <Route
-          element={
-            <ProtectedRoute>
+            </Suspense>} />
+        <Route element={<ProtectedRoute>
               <SidebarLayout />
-            </ProtectedRoute>
-          }
-        >
+            </ProtectedRoute>}>
           <Route path="/app" element={<Dashboard />} />
           <Route path="/app/market" element={<CoinMarket />} />
           <Route path="/app/search" element={<Search />} />
@@ -98,147 +87,130 @@ const AnimatedRoutes = () => {
               <Dashboard />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/market"
           element={
             <ProtectedRoute>
               <CoinMarket />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/search"
           element={
             <ProtectedRoute>
               <Search />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/leaderboard"
           element={
             <ProtectedRoute>
               <Leaderboard />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/ai"
           element={
             <ProtectedRoute>
               <AiPredections />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/coin/USD"
           element={
             <ProtectedRoute>
               <VirtualUsdPage />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/coin/:id"
           element={
             <ProtectedRoute>
               <CurrencyDetailsPage />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/news"
           element={
             <ProtectedRoute>
               <News />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/watchlist"
           element={
             <ProtectedRoute>
               <Watchlist />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/portfolio"
           element={
             <ProtectedRoute>
               <Portfolio />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/learn"
           element={
             <ProtectedRoute>
               <Learn />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/profile"
           element={
             <ProtectedRoute>
               <UserProfile />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/more"
           element={
             <ProtectedRoute>
               <MoreMobileNavPage />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/faq"
           element={
             <ProtectedRoute>
               <FAQ />
             </ProtectedRoute>
           }
-        />
-        <Route
+         />
+         <Route
           path="/app/market/globalStats"
           element={
             <ProtectedRoute>
               <GlobalStats />
             </ProtectedRoute>
           }
-        /> */}
-        <Route
-          path="/signup"
-          element={
-            <Suspense fallback={<Loader />}>
+         /> */}
+        <Route path="/signup" element={<Suspense fallback={<Loader />}>
               <Signup />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/resetPassword"
-          element={
-            <Suspense fallback={<Loader />}>
+            </Suspense>} />
+        <Route path="/resetPassword" element={<Suspense fallback={<Loader />}>
               <ResetPassword />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/forgotPassword"
-          element={
-            <Suspense fallback={<Loader />}>
+            </Suspense>} />
+        <Route path="/forgotPassword" element={<Suspense fallback={<Loader />}>
               <ForgotPassword />
-            </Suspense>
-          }
-        />
+            </Suspense>} />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
-    </AnimatePresence>
-  );
-};
-
+    </AnimatePresence>;
+});
 export default AnimatedRoutes;

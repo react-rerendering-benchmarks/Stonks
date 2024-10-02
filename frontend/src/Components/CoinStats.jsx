@@ -1,35 +1,29 @@
+import { useRef } from "react";
 import { useEffect, useState } from "react";
 import usd from "../Assets/svg/USD.svg";
-
-const CoinStats = ({ data, stockData, currencyRates, news }) => {
-  const [coinValue, setCoinValue] = useState(1);
-
+const CoinStats = ({
+  data,
+  stockData,
+  currencyRates,
+  news
+}) => {
+  const coinValue = useRef(1);
   const currencyConverter = (amount, usdValueOfAmount) => {
     const usdEquivalent = amount / usdValueOfAmount;
     return usdEquivalent.toFixed(2);
   };
-
-  const [coinUsdPrice, setCoinUsdPrice] = useState(() =>
-    currencyConverter(
-      data?.preMarketPrice ? data?.preMarketPrice : data?.regularMarketPrice,
-      currencyRates.rates[data?.currency]
-    )
-  );
-
-  const changeCoinValue = (e) => {
-    setCoinValue(e.target.value);
+  const coinUsdPrice = useRef(() => currencyConverter(data?.preMarketPrice ? data?.preMarketPrice : data?.regularMarketPrice, currencyRates.rates[data?.currency]));
+  const changeCoinValue = e => {
+    coinValue.current.value = e.target.value;
     // console.log(e.target.value.isInteger());
     const numOfStocks = e.target.value;
     const oneStockAmount = data?.preMarketPrice ? data?.preMarketPrice : data?.regularMarketPrice;
     const oneUsdEquivalent = currencyRates.rates[data?.currency];
-
     const oneStockInUsd = currencyConverter(oneStockAmount, oneUsdEquivalent);
     // const usdAmount = currencyConverter
-    setCoinUsdPrice(oneStockInUsd * numOfStocks);
+    coinUsdPrice.current.value = oneStockInUsd * numOfStocks;
   };
-
-  return (
-    <>
+  return <>
       {/* price converter */}
       <h2 className="text-xl md:text-3xl mx-4 text-white font-title mb-4 font-bold ">
         Price Converter
@@ -46,32 +40,13 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
             </div>
           </div>
           <div className="mx-2">
-            <input
-              type="number"
-              id="coinValue"
-              name="coinValue"
-              min="0"
-              value={coinValue}
-              onChange={changeCoinValue}
-              className="w-20 md:w-40 h-full rounded-lg text-xl  font-title focus:ring-0 text-gray-50 bg-gray-900 px-2"
-            />
+            <input type="number" id="coinValue" name="coinValue" min="0" ref={coinUsdPrice} className="w-20 md:w-40 h-full rounded-lg text-xl  font-title focus:ring-0 text-gray-50 bg-gray-900 px-2" />
           </div>
         </div>
         <div className="flex justify-center">
           <div className="flex justify-center items-center  my-2 border-2 border-white rounded-full w-9 h-9">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
             </svg>
           </div>
         </div>
@@ -85,15 +60,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
             </div>
           </div>
           <div className="mx-2">
-            <input
-              type="number"
-              min="0"
-              id="coinUsdValue"
-              name="coinUsdValue"
-              value={coinUsdPrice}
-              readOnly={true}
-              className="w-20 md:w-40 h-full rounded-lg text-xl  font-title focus:ring-0 text-gray-50 bg-gray-900 px-2"
-            />
+            <input type="number" min="0" id="coinUsdValue" name="coinUsdValue" value={coinUsdPrice.current.value} readOnly={true} className="w-20 md:w-40 h-full rounded-lg text-xl  font-title focus:ring-0 text-gray-50 bg-gray-900 px-2" />
           </div>
         </div>
       </div>
@@ -120,9 +87,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
               </div>
               <div>
                 <p className="text-xl">
-                  {stockData?.preMarketPrice
-                    ? stockData?.preMarketPrice
-                    : stockData?.regularMarketPrice}{" "}
+                  {stockData?.preMarketPrice ? stockData?.preMarketPrice : stockData?.regularMarketPrice}{" "}
                   {stockData?.currency}
                 </p>
               </div>
@@ -155,11 +120,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 <span className="text-xl">Regular Market Change</span>
               </div>
               <div>
-                <p
-                  className={`text-xl text-left font-bold my-2 ${
-                    stockData?.regularMarketChange >= 0 ? "text-green-400" : "text-red-400"
-                  } `}
-                >
+                <p className={`text-xl text-left font-bold my-2 ${stockData?.regularMarketChange >= 0 ? "text-green-400" : "text-red-400"} `}>
                   {stockData?.regularMarketChange && stockData?.regularMarketChange.toFixed(3)}%
                 </p>
               </div>
@@ -199,13 +160,8 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 <span className="text-xl">50 Days</span>
               </div>
               <div>
-                <p
-                  className={`text-xl text-left font-bold my-2 ${
-                    stockData?.fiftyDayAverageChangePercent >= 0 ? "text-green-400" : "text-red-400"
-                  } `}
-                >
-                  {stockData?.fiftyDayAverageChangePercent &&
-                    stockData?.fiftyDayAverageChangePercent.toFixed(3)}
+                <p className={`text-xl text-left font-bold my-2 ${stockData?.fiftyDayAverageChangePercent >= 0 ? "text-green-400" : "text-red-400"} `}>
+                  {stockData?.fiftyDayAverageChangePercent && stockData?.fiftyDayAverageChangePercent.toFixed(3)}
                   %
                 </p>
               </div>
@@ -216,15 +172,8 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 <span className="text-xl">200 Days</span>
               </div>
               <div>
-                <p
-                  className={`text-xl text-left font-bold my-2 ${
-                    stockData?.twoHundredDayAverageChangePercent >= 0
-                      ? "text-green-400"
-                      : "text-red-400"
-                  } `}
-                >
-                  {stockData?.twoHundredDayAverageChangePercent &&
-                    stockData?.twoHundredDayAverageChangePercent.toFixed(3)}
+                <p className={`text-xl text-left font-bold my-2 ${stockData?.twoHundredDayAverageChangePercent >= 0 ? "text-green-400" : "text-red-400"} `}>
+                  {stockData?.twoHundredDayAverageChangePercent && stockData?.twoHundredDayAverageChangePercent.toFixed(3)}
                   %
                 </p>
               </div>
@@ -235,15 +184,8 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 <span className="text-xl">52 Week </span>
               </div>
               <div>
-                <p
-                  className={`text-xl text-left font-bold my-2 ${
-                    stockData?.fiftyTwoWeekHighChangePercent >= 0
-                      ? "text-green-400"
-                      : "text-red-400"
-                  } `}
-                >
-                  {stockData?.fiftyTwoWeekHighChangePercent &&
-                    stockData?.fiftyTwoWeekHighChangePercent.toFixed(3)}
+                <p className={`text-xl text-left font-bold my-2 ${stockData?.fiftyTwoWeekHighChangePercent >= 0 ? "text-green-400" : "text-red-400"} `}>
+                  {stockData?.fiftyTwoWeekHighChangePercent && stockData?.fiftyTwoWeekHighChangePercent.toFixed(3)}
                   %
                 </p>
               </div>
@@ -270,8 +212,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">Reddit Avg Posts In 48H</span>
               </div>
@@ -283,8 +224,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">Reddit Avg Comments In 48H</span>
               </div>
@@ -296,8 +236,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">Reddit Subscribers</span>
               </div>
@@ -311,8 +250,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
             </li>
           </ul>
         </div>
-
-        <div className=" shadow-lg mx-auto rounded-2xl bg-black w-[90%]">
+         <div className=" shadow-lg mx-auto rounded-2xl bg-black w-[90%]">
           <p className="font-bold text-2xl md:text-3xl py-4  text-black dark:text-white">
             {data.name} Social Media Links
           </p>
@@ -338,8 +276,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">Blockchain Website</span>
               </div>
@@ -360,8 +297,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">Official Forum</span>
               </div>
@@ -382,8 +318,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">Chat URL</span>
               </div>
@@ -404,8 +339,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">Reddit Url</span>
               </div>
@@ -426,8 +360,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">GitHub Repo</span>
               </div>
@@ -450,7 +383,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
             </li>
           </ul>
         </div>
-      </div> */}
+       </div> */}
 
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-2  mt-8">
         {/* <div className=" shadow-lg mx-auto rounded-2xl bg-black w-[90%]">
@@ -475,8 +408,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">24 Hour</span>
               </div>
@@ -493,8 +425,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">7 Days</span>
               </div>
@@ -511,8 +442,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">14 Days</span>
               </div>
@@ -529,8 +459,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">30 Days</span>
               </div>
@@ -547,8 +476,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">60 Days</span>
               </div>
@@ -565,8 +493,7 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                 </p>
               </div>
             </li>
-
-            <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+             <li className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
               <div className="flex items-center justify-start text-sm">
                 <span className="text-xl">1 Year</span>
               </div>
@@ -584,23 +511,15 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
               </div>
             </li>
           </ul>
-        </div> */}
+         </div> */}
       </div>
-      {news !== "undefined" && (
-        <section className="px-4 lg:px-4 py-2 lg:py-8 mx-auto max-w-[1600px]">
+      {news !== "undefined" && <section className="px-4 lg:px-4 py-2 lg:py-8 mx-auto max-w-[1600px]">
           <h2 className="mt-4 lg:mt-0 mb-8 text-2xl md:text-3xl font-extrabold leading-tight text-white font-title">
             {stockData?.displayName ? stockData?.displayName : stockData?.shortName} News
           </h2>
 
           <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-            {news?.length > 0 &&
-              news?.map((news) => (
-                <a
-                  className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-                  href={news.link}
-                  rel="noreferrer"
-                  target="_blank"
-                >
+            {news?.length > 0 && news?.map(news => <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href={news.link} rel="noreferrer" target="_blank">
                   <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
                   <div className="justify-between sm:flex font-title">
@@ -615,12 +534,12 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                         src={news?.image?.thumbnail?.contentUrl}
                         alt="News cover"
                       />
-                    </div> */}
+                     </div> */}
                   </div>
 
                   {/* <div className="mt-4 sm:pr-8 font-text">
                     <p className="text-sm text-gray-400 line-clamp-4">{news.description}</p>
-                  </div> */}
+                   </div> */}
 
                   <dl className="flex mt-6">
                     <div className="flex flex-col-reverse">
@@ -628,13 +547,9 @@ const CoinStats = ({ data, stockData, currencyRates, news }) => {
                       <dd className="text-xs text-gray-500">{news.providerPublishTime}</dd>
                     </div>
                   </dl>
-                </a>
-              ))}
+                </a>)}
           </div>
-        </section>
-      )}
-    </>
-  );
+        </section>}
+    </>;
 };
-
 export default CoinStats;

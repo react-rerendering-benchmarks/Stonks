@@ -1,25 +1,17 @@
+import { memo } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-
 import { useAuth } from "../Context/AuthContext";
-import {
-  useFetchAvailableCoinsQuery,
-  useGetPortfolioCoinDataQuery,
-  useGetPortfolioDataQuery,
-  useGetUserNetworthQuery,
-  useUpdateUserNetworthQuery
-} from "../services/supabaseApi";
-
+import { useFetchAvailableCoinsQuery, useGetPortfolioCoinDataQuery, useGetPortfolioDataQuery, useGetUserNetworthQuery, useUpdateUserNetworthQuery } from "../services/supabaseApi";
 import emptyWatchlistLogo from "../Assets/svg/emptyWatchlist.svg";
-
 import Loader from "../Components/Loader";
 import { useGetCurrencyConversionsQuery } from "../services/coinsDataApi";
-
-const Portfolio = () => {
-  const { currentUser } = useAuth();
+const Portfolio = memo(() => {
+  const {
+    currentUser
+  } = useAuth();
   const navigate = useNavigate();
-
   const {
     data: portfolioData,
     error,
@@ -28,15 +20,14 @@ const Portfolio = () => {
     isSuccess,
     refetch: refetchPortfolioData
   } = useGetPortfolioDataQuery(currentUser.uid);
-
   const currencyConverter = (amount, usdValueOfAmount) => {
     const usdEquivalent = amount / usdValueOfAmount;
     return usdEquivalent.toFixed(2);
   };
-
-  const { data: currencyConversions, isLoading: currencyConversionLoading } =
-    useGetCurrencyConversionsQuery();
-
+  const {
+    data: currencyConversions,
+    isLoading: currencyConversionLoading
+  } = useGetCurrencyConversionsQuery();
   const {
     data: portfolioCoinData,
     // error: fetchPortfolioCoinDataError,
@@ -47,10 +38,9 @@ const Portfolio = () => {
   // , { pollingInterval: 5000 }
 
   console.log("portfolio data is", portfolioData);
-
   useEffect(() => {
     const interval = setInterval(() => {
-      const openMarket = portfolioCoinData?.filter((stock) => stock?.marketState !== "CLOSED");
+      const openMarket = portfolioCoinData?.filter(stock => stock?.marketState !== "CLOSED");
       if (openMarket?.length !== 0) {
         console.log("updating portfolio prices");
         refetchPortfolioCoinData();
@@ -58,7 +48,6 @@ const Portfolio = () => {
         console.log("All markets are closed");
       }
     }, 10000);
-
     return () => {
       clearInterval(interval);
     };
@@ -75,18 +64,11 @@ const Portfolio = () => {
 
   // get coin percentage change
   function percentageChange(stockId, coinAmount, amount, currency) {
-    const coinData = portfolioCoinData.filter((stock) => stock.symbol === stockId);
-
+    const coinData = portfolioCoinData.filter(stock => stock.symbol === stockId);
     if (coinData.length !== 0) {
-      const currentCoinPrice = currencyConverter(
-        coinData[0]?.preMarketPrice ? coinData[0]?.preMarketPrice : coinData[0]?.regularMarketPrice,
-        currencyConversions.rates[currency]
-      );
-
+      const currentCoinPrice = currencyConverter(coinData[0]?.preMarketPrice ? coinData[0]?.preMarketPrice : coinData[0]?.regularMarketPrice, currencyConversions.rates[currency]);
       const oneCoinAmount = amount / coinAmount;
-      const coinPercentageChange =
-        ((parseFloat(currentCoinPrice) - oneCoinAmount) / parseFloat(currentCoinPrice)) * 100;
-
+      const coinPercentageChange = (parseFloat(currentCoinPrice) - oneCoinAmount) / parseFloat(currentCoinPrice) * 100;
       return coinPercentageChange;
     }
     return;
@@ -107,16 +89,13 @@ const Portfolio = () => {
     error: networthError,
     refetch: UpdateNetworth
   } = useUpdateUserNetworthQuery(currentUser.uid);
-
   useEffect(() => {
     refetchPortfolioData();
     UpdateNetworth();
     // refetchNetworth();
     refetchPortfolioCoinData();
   }, []);
-
-  return (
-    <section className=" py-2 lg:py-8 mx-auto max-w-[1600px]">
+  return <section className=" py-2 lg:py-8 mx-auto max-w-[1600px]">
       <p className="text-white font-bold text-2xl md:text-3xl font-title mt-4 lg:mt-0  ml-3">
         Portfolio
       </p>
@@ -126,11 +105,7 @@ const Portfolio = () => {
       <div className="no-scrollbar flex overflow-scroll  p-4  rounded-box w-screen max-w-md md:max-w-full lg:flex-wrap  ">
         <div className="">
           <div className="  bg-gradient-to-tr from-gray-900 to-gray-700   overflow-hidden shadow rounded-lg w-60 md:w-72 relative mx-3 mt-1 ">
-            <img
-              src="https://img.icons8.com/clouds/200/000000/bitcoin.png"
-              alt="btc logo"
-              className="h-24 w-24  absolute opacity-50 -top-6 -right-6 md:-right-4"
-            />
+            <img src="https://img.icons8.com/clouds/200/000000/bitcoin.png" alt="btc logo" className="h-24 w-24  absolute opacity-50 -top-6 -right-6 md:-right-4" />
             <div className="px-4 py-5 sm:p-6">
               <dl>
                 <dt className="font-title text-sm leading-5 font-medium text-gray-400 truncate">
@@ -146,11 +121,7 @@ const Portfolio = () => {
 
         <div className="">
           <div className="  bg-gradient-to-tr from-gray-900 to-gray-700   overflow-hidden shadow rounded-lg w-60 md:w-72 relative mx-3 mt-1 ">
-            <img
-              src="https://img.icons8.com/fluency/96/000000/bullish.png"
-              alt="btc logo"
-              className="h-24 w-24  absolute opacity-50 -top-6 -right-6 md:-right-4"
-            />
+            <img src="https://img.icons8.com/fluency/96/000000/bullish.png" alt="btc logo" className="h-24 w-24  absolute opacity-50 -top-6 -right-6 md:-right-4" />
             <div className="px-4 py-5 sm:p-6">
               <dl>
                 <dt className="font-title text-sm leading-5 font-medium text-gray-400 truncate">
@@ -181,27 +152,11 @@ const Portfolio = () => {
             <p className="w-28 md:w-40  text-white text-left px-3">Holdings</p>
           </div>
         </li>
-        {isSuccess &&
-          fetchPortfolioCoinDataSuccess &&
-          portfolioCoinData.map((stock, index) => {
-            const purchasedStockData = portfolioData.filter(
-              (purchasedStock) => purchasedStock?.stockId === stock?.symbol
-            );
-
-            const coinPercentageChange = percentageChange(
-              stock.symbol,
-              purchasedStockData[0]?.stockAmount,
-              purchasedStockData[0]?.amount,
-              stock?.currency
-            );
-            console.log(stock);
-
-            return (
-              <li
-                key={index}
-                onClick={() => navigate(`/app/coin/${stock?.symbol}`)}
-                className="grid grid-cols-3 text-gray-500 py-2 px-1md:px-5 hover:bg-gray-900 rounded-lg cursor-pointer border-b-2 border-gray-800 "
-              >
+        {isSuccess && fetchPortfolioCoinDataSuccess && portfolioCoinData.map((stock, index) => {
+        const purchasedStockData = portfolioData.filter(purchasedStock => purchasedStock?.stockId === stock?.symbol);
+        const coinPercentageChange = percentageChange(stock.symbol, purchasedStockData[0]?.stockAmount, purchasedStockData[0]?.amount, stock?.currency);
+        console.log(stock);
+        return <li key={index} onClick={() => navigate(`/app/coin/${stock?.symbol}`)} className="grid grid-cols-3 text-gray-500 py-2 px-1md:px-5 hover:bg-gray-900 rounded-lg cursor-pointer border-b-2 border-gray-800 ">
                 <div className="flex items-center space-x-2 ">
                   <p className="pl-1">{index + 1}</p>
                   {/* <img
@@ -209,7 +164,7 @@ const Portfolio = () => {
                     src={coin.image}
                     alt="cryptocurrency"
                     loading="lazy"
-                  /> */}
+                   /> */}
                   <div>
                     <p className=" w-24 md:w-64 text-white break-words">
                       {stock?.displayName ? stock?.displayName : stock?.shortName}
@@ -221,16 +176,10 @@ const Portfolio = () => {
                 </div>
 
                 <div className="flex justify-center md:justify-start items-center space-x-4">
-                  {coinPercentageChange && (
-                    <p
-                      className={`text-center  ${
-                        coinPercentageChange >= 0 ? "text-green-400" : "text-red-400"
-                      } font-semibold`}
-                    >
+                  {coinPercentageChange && <p className={`text-center  ${coinPercentageChange >= 0 ? "text-green-400" : "text-red-400"} font-semibold`}>
                       {coinPercentageChange >= 0 && "+"}
                       {coinPercentageChange.toFixed(2)}%
-                    </p>
-                  )}
+                    </p>}
                 </div>
 
                 <div className="flex items-center justify-start ml-auto md:ml-0 ">
@@ -242,11 +191,9 @@ const Portfolio = () => {
                     </span>
                   </p>
                 </div>
-              </li>
-            );
-          })}
-        {portfolioCoinData && portfolioCoinData?.length === 0 && (
-          <div className=" shadow-lg rounded-2xl  px-4 py-4 md:px-4 flex flex-col lg:justify-center align-center text-center max-w-xl m-auto">
+              </li>;
+      })}
+        {portfolioCoinData && portfolioCoinData?.length === 0 && <div className=" shadow-lg rounded-2xl  px-4 py-4 md:px-4 flex flex-col lg:justify-center align-center text-center max-w-xl m-auto">
             <img src={emptyWatchlistLogo} alt="empty watchlist" />
             <p className="text-white text-xl font-bold my-2 lg:text-center">
               Your portfolio is empty
@@ -254,17 +201,11 @@ const Portfolio = () => {
             <p className="text-gray-300 lg:text-center mb-5">
               Press the button to browse all the coins
             </p>
-            <Link
-              to="/app/search"
-              className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-            >
+            <Link to="/app/search" className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
               Search Stocks
             </Link>
-          </div>
-        )}
+          </div>}
       </ul>
-    </section>
-  );
-};
-
+    </section>;
+});
 export default Portfolio;
