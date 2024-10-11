@@ -1,23 +1,23 @@
+import { memo } from "react";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { getAdditionalUserInfo } from "firebase/auth";
-
 import google from "../../Assets/svg/google.svg";
 import { useAuth } from "../../Context/AuthContext";
-
 import ErrorToast from "../ErrorToast";
-
-const GoogleLoginBtn = () => {
-  const { signInWithGoogle } = useAuth();
+const GoogleLoginBtn = memo(() => {
+  const {
+    signInWithGoogle
+  } = useAuth();
   let navigate = useNavigate();
-
   const toastRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState(null);
-
   async function googleSignInHandler() {
     try {
       const response = await signInWithGoogle();
-      const { isNewUser } = getAdditionalUserInfo(response);
+      const {
+        isNewUser
+      } = getAdditionalUserInfo(response);
       console.log("isNewUser", isNewUser);
       let userNetworth, availableCoins;
       if (isNewUser) {
@@ -34,9 +34,7 @@ const GoogleLoginBtn = () => {
             email: response.user.email
           })
         });
-
         const addUserRes = await addUser.json();
-
         if (!addUser.ok) {
           throw new Error(addUser);
         }
@@ -52,14 +50,12 @@ const GoogleLoginBtn = () => {
           })
         });
         const addUsdRes = await addVirtualUsd.json();
-
         if (!addVirtualUsd.ok) {
           throw new Error(addVirtualUsd);
         }
         userNetworth = addUserRes;
         availableCoins = addUsdRes;
       }
-
       console.log("logged in user successfully");
       navigate("/app", {
         state: {
@@ -73,19 +69,12 @@ const GoogleLoginBtn = () => {
       console.log(error);
     }
   }
-  return (
-    <>
+  return <>
       <ErrorToast message={errorMessage} ref={toastRef} />
-      <button
-        onClick={googleSignInHandler}
-        aria-label="Continue with google"
-        className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400 py-3.5 px-4 border rounded-lg border-gray-400 flex items-center w-full mt-10"
-      >
+      <button onClick={googleSignInHandler} aria-label="Continue with google" className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400 py-3.5 px-4 border rounded-lg border-gray-400 flex items-center w-full mt-10">
         <img src={google} alt="" width={19} height={20} />
         <p className="text-base font-medium ml-4 text-gray-100">Continue with Google</p>
       </button>
-    </>
-  );
-};
-
+    </>;
+});
 export default GoogleLoginBtn;

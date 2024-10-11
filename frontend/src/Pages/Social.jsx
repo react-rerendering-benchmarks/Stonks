@@ -1,3 +1,4 @@
+import { memo } from "react";
 import React, { useRef, useState } from "react";
 import { useGetAllPostsQuery } from "../services/postsApi";
 import { BiDownvote, BiUpvote } from "react-icons/bi";
@@ -6,16 +7,20 @@ import { Link } from "react-router-dom";
 import { Faq } from "../Components/FAQ";
 import ErrorToast from "../Components/ErrorToast";
 import Loader from "../Components/Loader";
-
-const Social = () => {
-  const { currentUser } = useAuth();
-  const { data, error, isLoading, isSuccess, refetch } = useGetAllPostsQuery();
-
+const Social = memo(() => {
+  const {
+    currentUser
+  } = useAuth();
+  const {
+    data,
+    error,
+    isLoading,
+    isSuccess,
+    refetch
+  } = useGetAllPostsQuery();
   const [errorMessage, setErrorMessage] = useState();
   const toastRef = useRef();
-
   console.log(data);
-
   async function handlePostUpvote(postId) {
     try {
       if (typeof postId !== "string") {
@@ -32,14 +37,11 @@ const Social = () => {
           type: "UPVOTE"
         })
       });
-
       const upvoteRes = await res.json();
       console.log("submit post", upvoteRes);
-
       if (upvoteRes.hasOwnProperty("message")) {
         throw new Error(upvoteRes?.message);
       }
-
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
@@ -49,7 +51,6 @@ const Social = () => {
       toastRef.current.show();
     }
   }
-
   async function handlePostDownvote(postId) {
     try {
       if (typeof postId !== "string") {
@@ -66,14 +67,11 @@ const Social = () => {
           type: "DOWNVOTE"
         })
       });
-
       const downvoteRes = await res.json();
       console.log("submit post", downvoteRes);
-
       if (downvoteRes.hasOwnProperty("message")) {
         throw new Error(downvoteRes?.message);
       }
-
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
@@ -83,9 +81,7 @@ const Social = () => {
       toastRef.current.show();
     }
   }
-
-  return (
-    <main>
+  return <main>
       <section className="flex items-start gap-8 lg:px-4 py-2 lg:py-8  mx-auto  max-w-[1600px]">
         <ErrorToast message={errorMessage} ref={toastRef} />
 
@@ -95,64 +91,38 @@ const Social = () => {
             Stonks Social
           </p>
           {/* navigate to post page */}
-          <Link
-            to="/app/social/new"
-            className=" p-4 mb-6 mx-3 px-2 md:mx-6 rounded-lg  bg-[#1a1a1b] flex gap-3 cursor-pointer"
-          >
-            <img
-              src={`https://avatars.dicebear.com/api/initials/${currentUser.displayName}.svg`}
-              alt=""
-              className="w-12 h-12 rounded-full dark:bg-gray-500"
-            />
-            <input
-              type="text"
-              id="default-input"
-              className=" border text-sm rounded-lg  block w-full p-2.5 bg-[#1a1a1b] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Create Post"
-              disabled
-            />
+          <Link to="/app/social/new" className=" p-4 mb-6 mx-3 px-2 md:mx-6 rounded-lg  bg-[#1a1a1b] flex gap-3 cursor-pointer">
+            <img src={`https://avatars.dicebear.com/api/initials/${currentUser.displayName}.svg`} alt="" className="w-12 h-12 rounded-full dark:bg-gray-500" />
+            <input type="text" id="default-input" className=" border text-sm rounded-lg  block w-full p-2.5 bg-[#1a1a1b] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Create Post" disabled />
           </Link>
-          {data?.map((post, idx) => (
-            <div
-              key={idx}
-              className="max-w-3xl  bg-[#1a1a1b] rounded-lg overflow-hidden shadow-lg mb-4 mx-3 px-2 md:mx-6 cursor-pointer"
-            >
+          {data?.map((post, idx) => <div key={idx} className="max-w-3xl  bg-[#1a1a1b] rounded-lg overflow-hidden shadow-lg mb-4 mx-3 px-2 md:mx-6 cursor-pointer">
               {/* <!-- Post Info --> */}
               <div className="p-4">
                 <div className="flex items-center mb-4">
-                  <img
-                    className="w-8 h-8 rounded-full object-cover object-center mr-2"
-                    src={`https://api.dicebear.com/6.x/fun-emoji/svg?seed=${post?.user?.name}&mouth=cute,kissHeart,lilSmile,smileLol,smileTeeth,tongueOut,wideSmile&backgroundColor=b6e3f4,c0aede,d1d4f9`}
-                    alt="Avatar of User"
-                  />
+                  <img className="w-8 h-8 rounded-full object-cover object-center mr-2" src={`https://api.dicebear.com/6.x/fun-emoji/svg?seed=${post?.user?.name}&mouth=cute,kissHeart,lilSmile,smileLol,smileTeeth,tongueOut,wideSmile&backgroundColor=b6e3f4,c0aede,d1d4f9`} alt="Avatar of User" />
                   <div>
                     <p className="text-sm font-medium text-gray-100">{post?.user?.name}</p>
                   </div>
                 </div>
-                <Link to={`/app/social/${post.id}`} state={{ data: post }}>
+                <Link to={`/app/social/${post.id}`} state={{
+              data: post
+            }}>
                   <h2 className="text-xl font-medium text-gray-100 mb-2 ">{post?.title}</h2>
                   <p className="text-gray-400 mb-4 line-clamp-3">{post?.body}</p>
                 </Link>
                 <div className="flex items-center">
-                  <button
-                    onClick={() => handlePostUpvote(post?.id)}
-                    className="text-gray-400 focus:outline-none mr-1"
-                  >
+                  <button onClick={() => handlePostUpvote(post?.id)} className="text-gray-400 focus:outline-none mr-1">
                     <BiUpvote className="text-gray-300 w-6 h-6 " />
                   </button>
                   <span className="text-gray-400  mx-2">
                     {post?.VotePost?.reduce((acc, currentVal) => acc + currentVal?.voting, 0)}
                   </span>
                   <button className="text-gray-400 focus:outline-none mr-1">
-                    <BiDownvote
-                      onClick={() => handlePostDownvote(post?.id)}
-                      className="text-gray-300 w-6 h-6 "
-                    />
+                    <BiDownvote onClick={() => handlePostDownvote(post?.id)} className="text-gray-300 w-6 h-6 " />
                   </button>
                 </div>
               </div>
-            </div>
-          ))}
+            </div>)}
         </section>
         {/*  */}
         <section className="hidden lg:block">
@@ -215,8 +185,6 @@ const Social = () => {
           </div>
         </section>
       </section>
-    </main>
-  );
-};
-
+    </main>;
+});
 export default Social;

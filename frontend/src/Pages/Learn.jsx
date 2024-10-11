@@ -1,6 +1,6 @@
-const Learn = () => {
-  return (
-    <section className="lg:px-4 py-2 lg:py-8 mx-auto max-w-[1600px]">
+import { memo } from "react";
+const Learn = memo(() => {
+  return <section className="lg:px-4 py-2 lg:py-8 mx-auto max-w-[1600px]">
       <h1 className="font-title text-white font-bold text-2xl md:text-3xl font-title mt-4 mb-4 lg:mt-0 ml-3 px-2 md:px-4">
         Courses & Blogs
       </h1>
@@ -16,12 +16,7 @@ const Learn = () => {
       </h1>
 
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 px-4 md:px-8">
-        <a
-          className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-          href="https://dev.to/narottam04/web-10-web-20-web-30-explained-591n"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href="https://dev.to/narottam04/web-10-web-20-web-30-explained-591n" rel="noreferrer" target="_blank">
           <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
           <div className="justify-between sm:flex font-title">
@@ -49,12 +44,7 @@ const Learn = () => {
           </dl>
         </a>
 
-        <a
-          className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-          href="https://hackernoon.com/wtf-is-the-blockchain-1da89ba19348"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href="https://hackernoon.com/wtf-is-the-blockchain-1da89ba19348" rel="noreferrer" target="_blank">
           <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
           <div className="justify-between sm:flex font-title">
@@ -88,12 +78,7 @@ const Learn = () => {
           </dl>
         </a>
 
-        <a
-          className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-          href="https://dev.to/narottam04/how-cryptocurrency-works-explained-visually-2j32"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href="https://dev.to/narottam04/how-cryptocurrency-works-explained-visually-2j32" rel="noreferrer" target="_blank">
           <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
           <div className="justify-between sm:flex font-title">
@@ -118,12 +103,7 @@ const Learn = () => {
           </div>
         </a>
 
-        <a
-          className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-          href="https://academy.binance.com/en/articles/what-is-cryptocurrency-mining"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href="https://academy.binance.com/en/articles/what-is-cryptocurrency-mining" rel="noreferrer" target="_blank">
           <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
           <div className="justify-between sm:flex font-title">
@@ -151,12 +131,7 @@ const Learn = () => {
           </dl>
         </a>
 
-        <a
-          className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-          href="https://academy.binance.com/en/articles/proof-of-work-explained"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href="https://academy.binance.com/en/articles/proof-of-work-explained" rel="noreferrer" target="_blank">
           <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
           <div className="justify-between sm:flex font-title">
@@ -182,12 +157,7 @@ const Learn = () => {
           </dl>
         </a>
 
-        <a
-          className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-          href="https://academy.binance.com/en/articles/mining-pools-explained"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href="https://academy.binance.com/en/articles/mining-pools-explained" rel="noreferrer" target="_blank">
           <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
           <div className="justify-between sm:flex font-title">
@@ -219,12 +189,7 @@ const Learn = () => {
       </h1>
 
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 px-4 md:px-8">
-        <a
-          className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-          href="https://academy.binance.com/en/articles/a-complete-guide-to-cryptocurrency-trading-for-beginners?"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href="https://academy.binance.com/en/articles/a-complete-guide-to-cryptocurrency-trading-for-beginners?" rel="noreferrer" target="_blank">
           <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
           <div className="justify-between sm:flex font-title">
@@ -253,12 +218,7 @@ const Learn = () => {
           </dl>
         </a>
 
-        <a
-          className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-          href="https://academy.binance.com/en/articles/how-to-trade-with-hammer-candlestick-patterns"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href="https://academy.binance.com/en/articles/how-to-trade-with-hammer-candlestick-patterns" rel="noreferrer" target="_blank">
           <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
           <div className="justify-between sm:flex font-title">
@@ -296,12 +256,7 @@ const Learn = () => {
       </h1>
 
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 px-4 md:px-8">
-        <a
-          className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-          href="https://academy.binance.com/en"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href="https://academy.binance.com/en" rel="noreferrer" target="_blank">
           <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
           <div className="justify-between sm:flex font-title">
@@ -318,12 +273,7 @@ const Learn = () => {
           </div>
         </a>
 
-        <a
-          className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-          href="https://a16z.com/2018/02/10/crypto-readings-resources/"
-          rel="noreferrer"
-          target="_blank"
-        >
+        <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href="https://a16z.com/2018/02/10/crypto-readings-resources/" rel="noreferrer" target="_blank">
           <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
           <div className="justify-between sm:flex font-title">
@@ -349,8 +299,6 @@ const Learn = () => {
           </div>
         </a>
       </div>
-    </section>
-  );
-};
-
+    </section>;
+});
 export default Learn;

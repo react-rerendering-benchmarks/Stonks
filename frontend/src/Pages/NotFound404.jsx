@@ -1,23 +1,15 @@
+import { memo } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-
 import error404 from "../Assets/images/error404.png";
-
-const NotFound404 = () => {
-  return (
-    <div className="bg-black">
+const NotFound404 = memo(() => {
+  return <div className="bg-black">
       <Helmet>
         <title>Not Found 404</title>
-        <meta
-          name="description"
-          content="Cryptocademy is an app that teaches people how to trade cryptocurrencies and invest in coins like bitcoin,ethereum etc. User can analyze market data by viewing charts, top daily cryptocurrency news. Through our curated blogs and courses,users can also learn more about cryptocurrency and blockchain concepts."
-        />
+        <meta name="description" content="Cryptocademy is an app that teaches people how to trade cryptocurrencies and invest in coins like bitcoin,ethereum etc. User can analyze market data by viewing charts, top daily cryptocurrency news. Through our curated blogs and courses,users can also learn more about cryptocurrency and blockchain concepts." />
         <link rel="canonical" href="https://cryptocademy.pages.dev/" />
         <meta property="og:title" content="Learn to invest like a pro" />
-        <meta
-          property="og:description"
-          content="Cryptocademy is an app that teaches people how to trade cryptocurrencies and invest in coins like bitcoin,ethereum etc. User can analyze market data by viewing charts, top daily cryptocurrency news. Through our curated blogs and courses,users can also learn more about cryptocurrency and blockchain concepts."
-        />
+        <meta property="og:description" content="Cryptocademy is an app that teaches people how to trade cryptocurrencies and invest in coins like bitcoin,ethereum etc. User can analyze market data by viewing charts, top daily cryptocurrency news. Through our curated blogs and courses,users can also learn more about cryptocurrency and blockchain concepts." />
         <meta property="og:image" content="/cryptocademy-logo-sideways-light.png" />
         <meta property="og:image:width" content="2727" />
         <meta property="og:image:height" content="1952" />
@@ -47,8 +39,6 @@ const NotFound404 = () => {
           <img src={error404} alt="404 error not found" />
         </div>
       </div>
-    </div>
-  );
-};
-
+    </div>;
+});
 export default NotFound404;

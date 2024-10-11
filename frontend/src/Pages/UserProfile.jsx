@@ -1,24 +1,17 @@
+import { memo } from "react";
 import { lazy, useState } from "react";
 import { Link } from "react-router-dom";
-
 import { useAuth } from "../Context/AuthContext";
-import {
-  useFetchAvailableCoinsQuery,
-  useGetLeaderboardQuery,
-  useGetPortfolioCoinDataQuery,
-  useGetPortfolioDataQuery,
-  useGetUserNetworthQuery,
-  useGetWatchlistDataQuery
-} from "../services/supabaseApi";
+import { useFetchAvailableCoinsQuery, useGetLeaderboardQuery, useGetPortfolioCoinDataQuery, useGetPortfolioDataQuery, useGetUserNetworthQuery, useGetWatchlistDataQuery } from "../services/supabaseApi";
 
 // import Logout from "../Components/Buttons/Logout";
 // import ResetVirtualBalance from "../Components/ResetVirtualBalance";
 const Logout = lazy(() => import("../Components/Buttons/Logout"));
 const ResetVirtualBalance = lazy(() => import("../Components/ResetVirtualBalance"));
-
-const UserProfile = () => {
-  const { currentUser } = useAuth();
-
+const UserProfile = memo(() => {
+  const {
+    currentUser
+  } = useAuth();
   const [resetModal, setResetModal] = useState(false);
 
   // fetch watchlist coin data
@@ -52,7 +45,6 @@ const UserProfile = () => {
     isSuccess: fetchLeaderboardSuccess,
     error: fetchLeaderboardError
   } = useGetLeaderboardQuery();
-
   const {
     data: portfolioData,
     error,
@@ -61,29 +53,19 @@ const UserProfile = () => {
     isSuccess
     // refetch: refetchPortfolioData
   } = useGetPortfolioCoinDataQuery(currentUser.uid);
-
-  return (
-    <section className="lg:px-4 py-2 lg:py-8  max-w-[1600px]">
+  return <section className="lg:px-4 py-2 lg:py-8  max-w-[1600px]">
       <p className="text-white font-bold text-2xl md:text-3xl font-title mt-4 mb-4 lg:mt-0 ml-3">
         Your Profile
       </p>
 
       <div className="flex flex-wrap md:space-x-4  justify-center md:justify-start ">
         <div className="  bg-gradient-to-tr from-gray-900 to-gray-700  overflow-hidden shadow rounded-lg w-[100%] md:w-72 xl:w-80 relative mx-4">
-          <img
-            src="https://img.icons8.com/officel/80/000000/anime-emoji.png"
-            alt="btc logo"
-            className="h-24 w-24 rounded-full absolute opacity-50 -top-6 -right-6 md:-right-4"
-          />
+          <img src="https://img.icons8.com/officel/80/000000/anime-emoji.png" alt="btc logo" className="h-24 w-24 rounded-full absolute opacity-50 -top-6 -right-6 md:-right-4" />
           <div className="px-4 py-5 sm:p-6 ">
             <div className="flex items-center p-2  space-x-4 justify-self-end cursor-pointer">
               <img
-                // src={`https://avatars.dicebear.com/api/initials/${currentUser.displayName}.svg`}
-                src={`https://api.dicebear.com/6.x/fun-emoji/svg?seed=${currentUser?.uid}&mouth=cute,kissHeart,lilSmile,smileLol,smileTeeth,tongueOut,wideSmile&backgroundColor=b6e3f4,c0aede,d1d4f9`}
-
-                alt=""
-                className="w-12 h-12 rounded-full dark:bg-gray-500"
-              />
+            // src={`https://avatars.dicebear.com/api/initials/${currentUser.displayName}.svg`}
+            src={`https://api.dicebear.com/6.x/fun-emoji/svg?seed=${currentUser?.uid}&mouth=cute,kissHeart,lilSmile,smileLol,smileTeeth,tongueOut,wideSmile&backgroundColor=b6e3f4,c0aede,d1d4f9`} alt="" className="w-12 h-12 rounded-full dark:bg-gray-500" />
               <div>
                 <h2 className="text-lg font-semibold text-white font-title">
                   {currentUser.displayName}
@@ -96,19 +78,13 @@ const UserProfile = () => {
               </div>
             </div>
             <div className="my-4">
-              <Link
-                to="/forgotPassword"
-                className=" text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-semibold font-text rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-              >
+              <Link to="/forgotPassword" className=" text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-semibold font-text rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
                 Change Your Password
               </Link>
             </div>
             <Logout />
             <div className="my-4">
-              <button
-                onClick={() => setResetModal(!resetModal)}
-                className=" text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-semibold font-text rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-              >
+              <button onClick={() => setResetModal(!resetModal)} className=" text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-semibold font-text rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
                 Reset Virtual USD Balance
               </button>
             </div>
@@ -123,11 +99,7 @@ const UserProfile = () => {
                 <h1 className="">Name</h1>
                 <p className="font-medium tracking-wide">{currentUser.displayName}</p>
               </div>
-              <img
-                alt="user card chip"
-                className="w-14 h-14"
-                src="https://img.icons8.com/offices/80/000000/sim-card-chip.png"
-              />
+              <img alt="user card chip" className="w-14 h-14" src="https://img.icons8.com/offices/80/000000/sim-card-chip.png" />
             </div>
             <div className="pt-1">
               <h1 className="">Account Balance</h1>
@@ -170,25 +142,17 @@ const UserProfile = () => {
           </p>
 
           <ul>
-            {fetchWatchlistErr ? (
-              <div className=" shadow-lg rounded-2xl  px-4 py-4 md:px-4 bg-gray-900 flex flex-col ;lg:justify-center ">
+            {fetchWatchlistErr ? <div className=" shadow-lg rounded-2xl  px-4 py-4 md:px-4 bg-gray-900 flex flex-col ;lg:justify-center ">
                 <p className="text-white text-xl font-bold my-2 lg:text-center">
                   Your watchlist is empty
                 </p>
                 <p className="text-white lg:text-center mb-5">
                   Press the button to browse all the coins
                 </p>
-                <Link
-                  to="/app/market"
-                  className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                >
+                <Link to="/app/market" className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
                   View Coins
                 </Link>
-              </div>
-            ) : (
-              fetchWatchlistSuccess &&
-              watchlistData.slice(0, 7).map((stock, index) => (
-                <li className="font-text flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+              </div> : fetchWatchlistSuccess && watchlistData.slice(0, 7).map((stock, index) => <li className="font-text flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
                   <div className="flex items-center justify-start text-sm space-x-3">
                     {/* <img src={coin.image.large} alt={`${coin.name}`} className="w-10 h-10" /> */}
                     <div className="">
@@ -204,29 +168,13 @@ const UserProfile = () => {
                       {stock?.currency}
                       <br />
                     </p>
-                    <p
-                      className={`text-right ${
-                        stock?.preMarketChangePercent
-                          ? stock?.preMarketChangePercent >= 0
-                            ? "text-green-400"
-                            : "text-red-400"
-                          : stock?.regularMarketChange >= 0
-                          ? "text-green-400"
-                          : "text-red-400"
-                      } font-semibold`}
-                    >
-                      {stock?.preMarketChangePercent
-                        ? stock?.preMarketChangePercent >= 0 && "+"
-                        : stock?.regularMarketChange >= 0 && "+"}
-                      {stock?.preMarketChangePercent
-                        ? stock?.preMarketChangePercent.toFixed(3)
-                        : stock?.regularMarketChange.toFixed(3)}
+                    <p className={`text-right ${stock?.preMarketChangePercent ? stock?.preMarketChangePercent >= 0 ? "text-green-400" : "text-red-400" : stock?.regularMarketChange >= 0 ? "text-green-400" : "text-red-400"} font-semibold`}>
+                      {stock?.preMarketChangePercent ? stock?.preMarketChangePercent >= 0 && "+" : stock?.regularMarketChange >= 0 && "+"}
+                      {stock?.preMarketChangePercent ? stock?.preMarketChangePercent.toFixed(3) : stock?.regularMarketChange.toFixed(3)}
                       %
                     </p>
                   </div>
-                </li>
-              ))
-            )}
+                </li>)}
           </ul>
         </div>
         {/* portfolio Data */}
@@ -236,25 +184,17 @@ const UserProfile = () => {
           </p>
 
           <ul>
-            {error ? (
-              <div className=" shadow-lg rounded-2xl  px-4 py-4 md:px-4 bg-gray-900 flex flex-col ;lg:justify-center ">
+            {error ? <div className=" shadow-lg rounded-2xl  px-4 py-4 md:px-4 bg-gray-900 flex flex-col ;lg:justify-center ">
                 <p className="text-white text-xl font-bold my-2 lg:text-center">
                   Your portfolio is empty
                 </p>
                 <p className="text-white lg:text-center mb-5">
                   Press the button to browse all the coins
                 </p>
-                <Link
-                  to="/app/search"
-                  className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                >
+                <Link to="/app/search" className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
                   Search Coins
                 </Link>
-              </div>
-            ) : (
-              isSuccess &&
-              portfolioData.slice(0, 7).map((stock, index) => (
-                <li className="flex items-center font-text text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
+              </div> : isSuccess && portfolioData.slice(0, 7).map((stock, index) => <li className="flex items-center font-text text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
                   <div className="flex items-center justify-start text-sm space-x-3">
                     {/* <img src={coin.image} alt={`${coin.coinName}`} className="w-10 h-10" /> */}
                     <div className="">
@@ -274,9 +214,7 @@ const UserProfile = () => {
                       {stock?.currency}
                     </p>
                   </div>
-                </li>
-              ))
-            )}
+                </li>)}
           </ul>
         </div>
       </div>
@@ -299,38 +237,12 @@ const UserProfile = () => {
               <p className="w-24 md:w-40  text-white text-right mr-2">Networth</p>
             </div>
           </li>
-          {fetchLeaderboardError ? (
-            <p className="text-red-500 text-xl">Something went wrong</p>
-          ) : (
-            fetchLeaderboardSuccess &&
-            leaderboard.slice(0, 5).map((user, index) => (
-              <li
-                key={index}
-                className="grid grid-cols-3 text-gray-500 py-2 px-1 md:px-5 hover:bg-gray-900 rounded-lg cursor-pointer border-b-2 border-gray-800 "
-              >
+          {fetchLeaderboardError ? <p className="text-red-500 text-xl">Something went wrong</p> : fetchLeaderboardSuccess && leaderboard.slice(0, 5).map((user, index) => <li key={index} className="grid grid-cols-3 text-gray-500 py-2 px-1 md:px-5 hover:bg-gray-900 rounded-lg cursor-pointer border-b-2 border-gray-800 ">
                 <div className="flex items-center space-x-2 ">
                   <p className="pl-1">{index + 1}</p>
-                  {index + 1 === 1 && (
-                    <img
-                      src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-reward-and-badges-justicon-flat-justicon-1.png"
-                      alt="gold trophy"
-                      className="w-8 h-8"
-                    />
-                  )}
-                  {index + 1 === 2 && (
-                    <img
-                      src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-baseball-justicon-flat-justicon.png"
-                      alt="silver trophy"
-                      className="w-8 h-8"
-                    />
-                  )}
-                  {index + 1 === 3 && (
-                    <img
-                      src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-reward-and-badges-justicon-flat-justicon-4.png"
-                      alt="3rd rank trophy"
-                      className="w-8 h-8"
-                    />
-                  )}
+                  {index + 1 === 1 && <img src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-reward-and-badges-justicon-flat-justicon-1.png" alt="gold trophy" className="w-8 h-8" />}
+                  {index + 1 === 2 && <img src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-baseball-justicon-flat-justicon.png" alt="silver trophy" className="w-8 h-8" />}
+                  {index + 1 === 3 && <img src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-reward-and-badges-justicon-flat-justicon-4.png" alt="3rd rank trophy" className="w-8 h-8" />}
                 </div>
                 <div className="flex items-center justify-start ml-auto md:ml-0 ">
                   <p className="w-28 md:w-40 truncate text-white font-semibold">{user.name}</p>
@@ -340,13 +252,9 @@ const UserProfile = () => {
                     ${user.networth}
                   </p>
                 </div>
-              </li>
-            ))
-          )}
+              </li>)}
         </ul>
       </div>
-    </section>
-  );
-};
-
+    </section>;
+});
 export default UserProfile;

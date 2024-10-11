@@ -1,22 +1,16 @@
+import { memo } from "react";
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
-
 import { useAuth } from "../Context/AuthContext";
 import { useGetTrendingCoinDataQuery } from "../services/coinsDataApi";
 import { useGetNewsQuery } from "../services/NewsApi";
-import {
-  useFetchAvailableCoinsQuery,
-  useGetLeaderboardQuery,
-  useGetUserNetworthQuery,
-  useGetWatchlistDataQuery,
-  useUpdateUserNetworthQuery
-} from "../services/supabaseApi";
-
+import { useFetchAvailableCoinsQuery, useGetLeaderboardQuery, useGetUserNetworthQuery, useGetWatchlistDataQuery, useUpdateUserNetworthQuery } from "../services/supabaseApi";
 import Loader from "./Loader";
-
-const DesktopDashboard = () => {
-  const { currentUser } = useAuth();
+const DesktopDashboard = memo(() => {
+  const {
+    currentUser
+  } = useAuth();
 
   // fetch trending coin data
   const {
@@ -69,26 +63,18 @@ const DesktopDashboard = () => {
     isSuccess: fetchLeaderboardSuccess,
     error: fetchLeaderboardError
   } = useGetLeaderboardQuery();
-
   const location = useLocation();
   // console.log(location?.state);
   console.log(watchlistData);
-
   useEffect(() => {
     refetchAvailableCoins();
     refetchUserNetworth();
   }, [location?.state]);
-
-  return (
-    <>
+  return <>
       {/* loading State */}
-      {(isLoading ||
-        fetchWatchlistLoading ||
-        // fetchNewsLoading ||
-        fetchAvailableUsdCoinsLoading ||
-        leaderboardIsLoading ||
-        userNetworthLoading ||
-        fetchNewsLoading) && <Loader />}
+      {(isLoading || fetchWatchlistLoading ||
+    // fetchNewsLoading ||
+    fetchAvailableUsdCoinsLoading || leaderboardIsLoading || userNetworthLoading || fetchNewsLoading) && <Loader />}
       {/* credit card */}
       <div className="w-80 m-auto md:m-0 md:w-96 h-56 lg:ml-8 bg-gradient-to-tr from-gray-900 to-gray-700  rounded-xl relative text-white shadow-2xl transition-transform transform hover:scale-110">
         <div className="w-full px-8 absolute top-8 font-text">
@@ -97,11 +83,7 @@ const DesktopDashboard = () => {
               <h4 className="">Name</h4>
               <p className="font-semibold tracking-wide">{currentUser.displayName}</p>
             </div>
-            <img
-              className="w-14 h-14"
-              src="https://img.icons8.com/offices/80/000000/sim-card-chip.png"
-              alt="card chip"
-            />
+            <img className="w-14 h-14" src="https://img.icons8.com/offices/80/000000/sim-card-chip.png" alt="card chip" />
           </div>
           <div className="pt-1">
             <h4 className="">Account Balance</h4>
@@ -141,14 +123,9 @@ const DesktopDashboard = () => {
             Trending Coins
           </p>
 
-          {isSuccess && (
-            <div>
+          {isSuccess && <div>
               <ul>
-                {trendingCoins.coins.map((coin, index) => (
-                  <li
-                    key={index}
-                    className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 "
-                  >
+                {trendingCoins.coins.map((coin, index) => <li key={index} className="flex items-center text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
                     <div className="flex items-center justify-start text-sm space-x-3">
                       <img src={coin.item.large} alt={`${coin.item.name}`} className="w-10 h-10" />
                       <div className="font-text">
@@ -161,11 +138,9 @@ const DesktopDashboard = () => {
                         <p className="text-white">${coin.item.price_btc?.toFixed(9)}</p>
                       </p>
                     </div>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
-            </div>
-          )}
+            </div>}
         </div>
         {/* watchlist data */}
         <div className=" shadow-lg mx-auto rounded-2xl bg-black w-[90%]">
@@ -174,28 +149,17 @@ const DesktopDashboard = () => {
           </p>
 
           <ul>
-            {fetchWatchlistErr || watchlistData?.length === 0 ? (
-              <div className=" shadow-lg rounded-2xl  px-4 py-4 md:px-4 bg-gray-900 flex flex-col ;lg:justify-center font-text">
+            {fetchWatchlistErr || watchlistData?.length === 0 ? <div className=" shadow-lg rounded-2xl  px-4 py-4 md:px-4 bg-gray-900 flex flex-col ;lg:justify-center font-text">
                 <p className="text-white text-xl font-bold my-2 lg:text-center">
                   Your watchlist is empty
                 </p>
                 <p className="text-white lg:text-center mb-5">
                   Press the button to browse all the coins
                 </p>
-                <Link
-                  to="/app/search"
-                  className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                >
+                <Link to="/app/search" className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
                   Search Coins
                 </Link>
-              </div>
-            ) : (
-              fetchWatchlistSuccess &&
-              watchlistData?.slice(0, 7).map((stock, index) => (
-                <li
-                  key={index}
-                  className="flex items-center font-text text-gray-200 justify-between py-3 border-b-2 border-gray-800 "
-                >
+              </div> : fetchWatchlistSuccess && watchlistData?.slice(0, 7).map((stock, index) => <li key={index} className="flex items-center font-text text-gray-200 justify-between py-3 border-b-2 border-gray-800 ">
                   <div className="flex items-center justify-start text-sm space-x-3">
                     {/* <img src={coin.image.large} alt={`${coin.name}`} className="w-10 h-10" /> */}
                     <div className="">
@@ -211,29 +175,13 @@ const DesktopDashboard = () => {
                       {stock?.currency}
                       <br />
                     </p>
-                    <p
-                      className={`text-right ${
-                        stock?.preMarketChangePercent
-                          ? stock?.preMarketChangePercent >= 0
-                            ? "text-green-400"
-                            : "text-red-400"
-                          : stock?.regularMarketChange >= 0
-                          ? "text-green-400"
-                          : "text-red-400"
-                      } font-semibold`}
-                    >
-                      {stock?.preMarketChangePercent
-                        ? stock?.preMarketChangePercent >= 0 && "+"
-                        : stock?.regularMarketChange >= 0 && "+"}
-                      {stock?.preMarketChangePercent
-                        ? stock?.preMarketChangePercent.toFixed(3)
-                        : stock?.regularMarketChange.toFixed(3)}
+                    <p className={`text-right ${stock?.preMarketChangePercent ? stock?.preMarketChangePercent >= 0 ? "text-green-400" : "text-red-400" : stock?.regularMarketChange >= 0 ? "text-green-400" : "text-red-400"} font-semibold`}>
+                      {stock?.preMarketChangePercent ? stock?.preMarketChangePercent >= 0 && "+" : stock?.regularMarketChange >= 0 && "+"}
+                      {stock?.preMarketChangePercent ? stock?.preMarketChangePercent.toFixed(3) : stock?.regularMarketChange.toFixed(3)}
                       %
                     </p>
                   </div>
-                </li>
-              ))
-            )}
+                </li>)}
           </ul>
         </div>
       </div>
@@ -256,38 +204,12 @@ const DesktopDashboard = () => {
               <p className="w-24 md:w-40  text-white text-right mr-2">Networth</p>
             </div>
           </li>
-          {fetchLeaderboardError ? (
-            <p className="text-red-500 text-xl">Something went wrong</p>
-          ) : (
-            fetchLeaderboardSuccess &&
-            leaderboard.slice(0, 5).map((user, index) => (
-              <li
-                key={index}
-                className="grid grid-cols-3 text-gray-500 py-2 px-1 md:px-5 hover:bg-gray-900 rounded-lg cursor-pointer border-b-2 border-gray-800 "
-              >
+          {fetchLeaderboardError ? <p className="text-red-500 text-xl">Something went wrong</p> : fetchLeaderboardSuccess && leaderboard.slice(0, 5).map((user, index) => <li key={index} className="grid grid-cols-3 text-gray-500 py-2 px-1 md:px-5 hover:bg-gray-900 rounded-lg cursor-pointer border-b-2 border-gray-800 ">
                 <div className="flex items-center space-x-2 ">
                   <p className="pl-1">{index + 1}</p>
-                  {index + 1 === 1 && (
-                    <img
-                      src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-reward-and-badges-justicon-flat-justicon-1.png"
-                      alt="gold trophy"
-                      className="w-8 h-8"
-                    />
-                  )}
-                  {index + 1 === 2 && (
-                    <img
-                      src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-baseball-justicon-flat-justicon.png"
-                      alt="silver trophy"
-                      className="w-8 h-8"
-                    />
-                  )}
-                  {index + 1 === 3 && (
-                    <img
-                      src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-reward-and-badges-justicon-flat-justicon-4.png"
-                      alt="3rd rank trophy"
-                      className="w-8 h-8"
-                    />
-                  )}
+                  {index + 1 === 1 && <img src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-reward-and-badges-justicon-flat-justicon-1.png" alt="gold trophy" className="w-8 h-8" />}
+                  {index + 1 === 2 && <img src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-baseball-justicon-flat-justicon.png" alt="silver trophy" className="w-8 h-8" />}
+                  {index + 1 === 3 && <img src="https://img.icons8.com/external-justicon-flat-justicon/64/000000/external-trophy-reward-and-badges-justicon-flat-justicon-4.png" alt="3rd rank trophy" className="w-8 h-8" />}
                 </div>
                 <div className="flex items-center justify-start ml-auto md:ml-0 ">
                   <p className="w-28 md:w-40 truncate text-white font-medium">{user.name}</p>
@@ -297,9 +219,7 @@ const DesktopDashboard = () => {
                     ${user.networth}
                   </p>
                 </div>
-              </li>
-            ))
-          )}
+              </li>)}
         </ul>
       </div>
       {/*News*/}
@@ -308,14 +228,7 @@ const DesktopDashboard = () => {
       </p>
 
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 px-8 pt-4">
-        {fetchNewsSuccess &&
-          news?.items?.slice(0, 6).map((news) => (
-            <a
-              className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg"
-              href={news?.link}
-              rel="noreferrer"
-              target="_blank"
-            >
+        {fetchNewsSuccess && news?.items?.slice(0, 6).map(news => <a className="relative block p-8 overflow-hidden border border-gray-100 rounded-lg" href={news?.link} rel="noreferrer" target="_blank">
               <span className="absolute inset-x-0 bottom-0 h-2  bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
 
               <div className="justify-between sm:flex">
@@ -332,12 +245,12 @@ const DesktopDashboard = () => {
                     src={news?.image?.thumbnail?.contentUrl || demoImage}
                     alt="News cover"
                   />
-                </div> */}
+                 </div> */}
               </div>
 
               {/* <div className="font-text mt-4 sm:pr-8">
                 <p className="text-sm text-gray-400 line-clamp-4">{news.description}</p>
-              </div> */}
+               </div> */}
 
               <dl className="font-text flex mt-6">
                 <div className="flex flex-col-reverse">
@@ -347,11 +260,8 @@ const DesktopDashboard = () => {
                   </dd>
                 </div>
               </dl>
-            </a>
-          ))}
+            </a>)}
       </div>
-    </>
-  );
-};
-
+    </>;
+});
 export default DesktopDashboard;
